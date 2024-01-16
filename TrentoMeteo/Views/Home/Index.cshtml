@@ -1,0 +1,106 @@
+﻿@model TrentoMeteo.ViewModels.VM
+    
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bollettino Meteorologico</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        #meteo-container {
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Provincia di Trento</h1>
+        <h2 class="text-center">Bollettino Meteorologico</h2>
+        <h3 class="text-center">Fonte dati: <a href="https://www.meteotrentino.it" target="_blank">Meteo Trentino</a></h3>
+
+        <form action="/weather?day=" method="get">
+            <div class="row mb-3">
+                <div class="col">
+                    <input id="input" type="date" class="form-control" name="day">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Cerca</button>
+                </div>
+            </div>
+        </form>
+
+        <div id="meteo-container">
+            @foreach (var giorno in Model.listaGiorni)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <h3>@giorno.giorno</h3>
+                    </div>
+                    <div class="card-body">
+                        <img src="@giorno.icona" alt="@giorno.descIcona" class="img-fluid">
+                        <p><b>Temperature min/max:</b> @giorno.tMinGiorno°C / @giorno.tMaxGiorno°C</p>
+                        <p>@giorno.testoGiorno</p>
+
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+                            @foreach (var fascia in giorno.fasce)
+                            {
+                                <div class="col mb-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">@fascia.fasciaPer (ore @fascia.fasciaOre)</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <img src="@fascia.icona" alt="@fascia.descIcona" class="img-fluid">
+                                            <p>@fascia.descIcona</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+
+</html>
