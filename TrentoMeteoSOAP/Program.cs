@@ -1,23 +1,27 @@
-var builder = WebApplication.CreateBuilder(args);
+using SoapCore;
+using static TrentoMeteoSOAP.Logic.ServiceLogic;
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+namespace TrentoMeteoSOAP
 {
-    app.UseExceptionHandler("/Home/Error");
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddSoapCore();
+            builder.Services.AddScoped<ISoapService, SoapService>();
+
+            var app = builder.Build();  
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.UseSoapEndpoint<ISoapService>("/Service.wsdl", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
+            });
+
+            app.Run();
+        }
+    }
 }
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
