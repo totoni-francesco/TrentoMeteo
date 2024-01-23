@@ -1,4 +1,4 @@
-﻿@model TrentoMeteo.ViewModels.VM
+﻿@model TrentoMeteo.ViewModel.MeteoViewModel
     
 @{
     Layout = null;
@@ -69,7 +69,7 @@
         </form>
 
         <div id="meteo-container">
-            @foreach (var giorno in Model.listaGiorni)
+            @foreach (var giorno in Model.giorni)
             {
                 <div class="card">
                     <div class="card-header">
